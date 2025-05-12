@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>AMP Task</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+<script>
+Qualtrics.SurveyEngine.addOnload(function() {
+  const container = document.createElement('div');
+  container.style.position = 'fixed';
+  container.style.inset = '0';
+  container.style.display = 'flex';
+  container.style.flexDirection = 'column';
+  container.style.alignItems = 'center';
+  container.style.justifyContent = 'center';
+  container.style.backgroundColor = '#ffffff';
+  container.style.fontFamily = 'sans-serif';
+  container.style.zIndex = '9999';
+  document.body.appendChild(container);
+
+  container.innerHTML = '<h1 style="font-size:24px;text-align:center;">הקובץ נטען בהצלחה ✔️</h1>';
+});
+</script>
+</body>
+</html>
