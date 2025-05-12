@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>AMP Task</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+<script>
+document.body.innerHTML = "<h2>מריצה מטלת AMP...</h2>";
+
+const results = [
+  { filename: "image1.jpg", response: 3, category: "ניטרליות" },
+  { filename: "image2.jpg", response: 1, category: "ערוכות" },
+  { filename: "image3.jpg", response: 4, category: "ללא עריכה" }
+];
+
+// אחרי 3 שניות – כאילו המטלה הסתיימה
+setTimeout(() => {
+  const joined = results.map(r => `${r.filename}:${r.response}[${r.category}]`).join('|');
+  window.parent.postMessage({ ampResponses: joined }, '*');
+  document.body.innerHTML = "<h2>הנתונים נשלחו ל-Qualtrics ✔️</h2>";
+}, 3000);
+</script>
+</body>
+</html>
