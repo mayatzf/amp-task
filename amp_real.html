@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>AMP Task</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+<script>
+let trials = [
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.53.45%20%282%29.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg19.png", category: "ערוכות", filename: "WhatsApp Image 2025-04-27 at 18.53.45 (2).jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/daisies-9547672_1280.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg18.png", category: "ניטרליות", filename: "daisies-9547672_1280.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/cucumbers-3809535_1280.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg09.png", category: "ניטרליות", filename: "cucumbers-3809535_1280.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/hessam-nabavi-ULU4auyoHkU-unsplash.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg26.png", category: "ללא עריכה", filename: "hessam-nabavi-ULU4auyoHkU-unsplash.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/chair-270980_1280.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg06.png", category: "ניטרליות", filename: "chair-270980_1280.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/macbook-459196_1280.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg14.png", category: "ניטרליות", filename: "macbook-459196_1280.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/car-8607713_1280.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg11.png", category: "ניטרליות", filename: "car-8607713_1280.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/WhatsApp%20Image%202025-04-20%20at%2010.26.11.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg13.png", category: "ללא עריכה", filename: "WhatsApp Image 2025-04-20 at 10.26.11.jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-21%20at%2019.15.32.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg24.png", category: "ערוכות", filename: "WhatsApp Image 2025-04-21 at 19.15.32.jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.53.46.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg07.png", category: "ערוכות", filename: "WhatsApp Image 2025-04-27 at 18.53.46.jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/forest-1835019_1280.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg13.png", category: "ניטרליות", filename: "forest-1835019_1280.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/mountain-8110139_1920.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg23.png", category: "ניטרליות", filename: "mountain-8110139_1920.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/trung-nhan-tran-JIVFlyqTOwU-unsplash.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg06.png", category: "ללא עריכה", filename: "trung-nhan-tran-JIVFlyqTOwU-unsplash.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.53.44.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg26.png", category: "ערוכות", filename: "WhatsApp Image 2025-04-27 at 18.53.44.jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/pencil-sharpener-2000622_1280.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg17.png", category: "ניטרליות", filename: "pencil-sharpener-2000622_1280.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/pixabay-topview%281%29.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg04.png", category: "ללא עריכה", filename: "pixabay-topview(1).jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/WhatsApp%20Image%202025-04-20%20at%2010.26.11%20%281%29.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg03.png", category: "ללא עריכה", filename: "WhatsApp Image 2025-04-20 at 10.26.11 (1).jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/pixabay-topview.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg11.png", category: "ללא עריכה", filename: "pixabay-topview.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-21%20at%2019.15.32%20%282%29.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg16.png", category: "ערוכות", filename: "WhatsApp Image 2025-04-21 at 19.15.32 (2).jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/pixabay.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg09.png", category: "ללא עריכה", filename: "pixabay.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.56.00.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg18.png", category: "ערוכות", filename: "WhatsApp Image 2025-04-27 at 18.56.00.jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/mountain-4810958_1280.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg03.png", category: "ניטרליות", filename: "mountain-4810958_1280.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.53.45.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg01.png", category: "ערוכות", filename: "WhatsApp Image 2025-04-27 at 18.53.45.jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.53.45%20%281%29.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg07.png", category: "ערוכות", filename: "WhatsApp Image 2025-04-27 at 18.53.45 (1).jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-21%20at%2019.15.32%20%283%29.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg29.png", category: "ערוכות", filename: "WhatsApp Image 2025-04-21 at 19.15.32 (3).jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/WhatsApp%20Image%202025-04-20%20at%2010.26.12.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg13.png", category: "ללא עריכה", filename: "WhatsApp Image 2025-04-20 at 10.26.12.jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/ironing-403074_1280.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg20.png", category: "ניטרליות", filename: "ironing-403074_1280.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-21%20at%2019.15.32%20%281%29.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg28.png", category: "ערוכות", filename: "WhatsApp Image 2025-04-21 at 19.15.32 (1).jpeg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/%D7%9C%D7%A9%D7%9C%D7%95%D7%97%20%D7%9C%D7%95%20%D7%93%D7%95%D7%92%D7%9E%D7%90.jpg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg09.png", category: "ללא עריכה", filename: "לשלוח לו דוגמא.jpg"},
+  {prime: "https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/WhatsApp%20Image%202025-04-20%20at%2010.26.11%20%282%29.jpeg", target: "https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg23.png", category: "ללא עריכה", filename: "WhatsApp Image 2025-04-20 at 10.26.11 (2).jpeg"}
+];
+
+trials = trials.sort(() => Math.random() - 0.5);
+let current = 0;
+const results = [];
+
+function showTrial() {
+  document.body.innerHTML = "";
+  const img = document.createElement('img');
+  img.src = trials[current].prime;
+  img.style.maxWidth = '250px';
+  document.body.appendChild(img);
+
+  setTimeout(() => {
+    document.body.innerHTML = "";
+    const mask = document.createElement('div');
+    mask.style.backgroundColor = '#000';
+    mask.style.width = '250px';
+    mask.style.height = '250px';
+    document.body.appendChild(mask);
+
+    setTimeout(() => {
+      document.body.innerHTML = "";
+      const target = document.createElement('img');
+      target.src = trials[current].target;
+      target.style.maxWidth = '120px';
+      document.body.appendChild(target);
+
+      setTimeout(() => {
+        document.body.innerHTML = "";
+        showScale();
+      }, 300); // מטרה
+
+    }, 150); // מיסוך
+
+  }, 200); // פריים
+}
+
+function showScale() {
+  const question = document.createElement('p');
+  question.textContent = 'עד כמה האות הסינית נראתה לך חמה או קרה?';
+  question.style.textAlign = 'center';
+  document.body.appendChild(question);
+
+  const scale = document.createElement('div');
+  scale.style.display = 'flex';
+  scale.style.justifyContent = 'center';
+  scale.style.gap = '15px';
+  scale.style.marginTop = '20px';
+  document.body.appendChild(scale);
+
+  const labels = ['קר מאוד', 'קר', 'חם', 'חם מאוד'];
+  const colors = ['#007bff', '#5bc0de', '#f0ad4e', '#d9534f'];
+
+  for (let i = 1; i <= 4; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = `${i} (${labels[i - 1]})`;
+    btn.style.padding = '10px';
+    btn.style.backgroundColor = colors[i - 1];
+    btn.style.color = 'white';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '8px';
+    btn.style.width = '100px';
+    btn.style.cursor = 'pointer';
+    btn.onclick = () => recordResponse(i);
+    scale.appendChild(btn);
+  }
+}
+
+function recordResponse(score) {
+  results.push({
+    filename: trials[current].filename,
+    response: score,
+    category: trials[current].category
+  });
+  current++;
+  if (current < trials.length) {
+    showTrial();
+  } else {
+    endTask();
+  }
+}
+
+function endTask() {
+  document.body.innerHTML = "<h2>הנתונים נשלחים ל-Qualtrics...</h2>";
+  const joined = results.map(r => `${r.filename}:${r.response}[${r.category}]`).join('|');
+  window.parent.postMessage({ ampResponses: joined }, '*');
+}
+
+document.body.innerHTML = "<button style='padding:12px 20px;font-size:16px;' onclick='showTrial()'>התחילי את המטלה</button>";
+</script>
+</body>
+</html>
