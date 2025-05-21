@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AMP Task Full Randomized</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+<script>
+  const allResults = [];
+
+  function block1(onFinish) {
+      const that = this;
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.inset = '0';
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+      container.style.backgroundColor = '#fff';
+      container.style.fontFamily = 'sans-serif';
+      container.style.zIndex = '9999';
+      document.body.appendChild(container);
+    
+      const primes = [
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/%D7%9C%D7%A9%D7%9C%D7%95%D7%97%20%D7%9C%D7%95%20%D7%93%D7%95%D7%92%D7%9E%D7%90.jpg', category: 'ללא עריכה', filename: 'לשלוח לו דוגמא.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/daisies-9547672_1280.jpg', category: 'ניטרליות', filename: 'daisies-9547672_1280.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/pencil-sharpener-2000622_1280.jpg', category: 'ניטרליות', filename: 'pencil-sharpener-2000622_1280.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/trung-nhan-tran-JIVFlyqTOwU-unsplash.jpg', category: 'ללא עריכה', filename: 'trung-nhan-tran-JIVFlyqTOwU-unsplash.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/WhatsApp%20Image%202025-04-20%20at%2010.26.11%20%282%29.jpeg', category: 'ללא עריכה', filename: 'WhatsApp Image 2025-04-20 at 10.26.11 (2).jpeg'}
+      ];;
+      const targets = [
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg01.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg02.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg03.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg04.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg05.png'
+      ];;
+    
+      const results = [];
+      primes.sort(() => Math.random() - 0.5);
+      targets.sort(() => Math.random() - 0.5);
+      const trials = primes.map((p, i) => ({ prime: p.url, category: p.category, filename: p.filename, target: targets[i] }));
+      let current = 0;
+    
+      const preload = () => {
+        let loaded = 0;
+        const all = trials.flatMap(t => [t.prime, t.target]);
+        all.forEach(src => {
+          const img = new Image(); img.src = src;
+          img.onload = img.onerror = () => {
+            loaded++;
+            if (loaded === all.length) showTrial();
+          };
+        });
+      };
+    
+      function showTrial() {
+        container.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = trials[current].prime;
+        img.style.maxWidth = '250px';
+        container.appendChild(img);
+        setTimeout(() => {
+          container.innerHTML = '';
+          setTimeout(() => {
+            const target = document.createElement('img');
+            target.src = trials[current].target;
+            target.style.maxWidth = '120px';
+            container.appendChild(target);
+            setTimeout(() => {
+              container.innerHTML = '';
+              const mask = document.createElement('div');
+              mask.style.backgroundColor = '#000';
+              mask.style.width = '250px';
+              mask.style.height = '250px';
+              container.appendChild(mask);
+              setTimeout(() => { container.innerHTML = ''; showScale(); }, 200);
+            }, 500);
+          }, 200);
+        }, 300);
+      }
+    
+      function showScale() {
+        const q = document.createElement('p');
+        q.textContent = 'עד כמה האות הסינית נראתה לך חמה או קרה?';
+        q.style.textAlign = 'center';
+        q.style.marginBottom = '20px';
+        container.appendChild(q);
+        const box = document.createElement('div');
+        box.style.display = 'flex'; box.style.gap = '12px'; box.style.justifyContent = 'center';
+        container.appendChild(box);
+        const labels = ['קר מאוד', 'קר', 'חם', 'חם מאוד'];
+        const colors = ['#007bff','#5bc0de','#f0ad4e','#d9534f'];
+        for (let i = 1; i <= 4; i++) {
+          const b = document.createElement('div');
+          b.textContent = labels[i-1];
+          b.style.backgroundColor = colors[i-1];
+          b.style.color = 'white';
+          b.style.padding = '10px 16px';
+          b.style.fontSize = '15px';
+          b.style.border = 'none'; b.style.borderRadius = '6px';
+          b.onclick = () => record(i);
+          box.appendChild(b);
+        }
+      }
+    
+      function record(score) {
+        results.push({
+          prime: trials[current].prime,
+          target: trials[current].target,
+          response: score,
+          category: trials[current].category,
+          filename: trials[current].filename
+        });
+        current++;
+        if (current < trials.length) showTrial();
+        else save();
+      }
+    
+      function save() {
+        const joined = results.map(r => `${r.filename}:${r.response}[${r.category}]`).join('|');
+        // EmbeddedData removed('ampBlock1', joined);
+        const continueBtn = document.createElement('div');
+        continueBtn.textContent = 'המשך';
+        continueBtn.style.backgroundColor = '#007bff';
+        continueBtn.style.color = 'white';
+        continueBtn.style.padding = '12px 24px';
+        continueBtn.style.fontSize = '18px';
+        continueBtn.style.borderRadius = '8px';
+        continueBtn.style.cursor = 'pointer';
+        continueBtn.style.marginTop = '40px';
+        continueBtn.onclick = function() {
+          onFinish();
+        };
+        container.innerHTML = '';
+        container.appendChild(continueBtn);
+      }
+      preload();
+  }}
+  function block2(onFinish) {
+      const that = this;
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.inset = '0';
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+      container.style.backgroundColor = '#fff';
+      container.style.fontFamily = 'sans-serif';
+      container.style.zIndex = '9999';
+      document.body.appendChild(container);
+    
+      const primes = [
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/WhatsApp%20Image%202025-04-20%20at%2010.26.12.jpeg', category: 'ללא עריכה', filename: 'WhatsApp Image 2025-04-20 at 10.26.12.jpeg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/pixabay-topview.jpg', category: 'ללא עריכה', filename: 'pixabay-topview.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/ironing-403074_1280.jpg', category: 'ניטרליות', filename: 'ironing-403074_1280.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.56.00.jpeg', category: 'ערוכות', filename: 'WhatsApp Image 2025-04-27 at 18.56.00.jpeg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/WhatsApp%20Image%202025-04-20%20at%2010.26.11%20%281%29.jpeg', category: 'ללא עריכה', filename: 'WhatsApp Image 2025-04-20 at 10.26.11 (1).jpeg'}
+      ];;
+      const targets = [
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg06.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg07.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg08.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg09.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg10.png'
+      ];;
+    
+      const results = [];
+      primes.sort(() => Math.random() - 0.5);
+      targets.sort(() => Math.random() - 0.5);
+      const trials = primes.map((p, i) => ({ prime: p.url, category: p.category, filename: p.filename, target: targets[i] }));
+      let current = 0;
+    
+      const preload = () => {
+        let loaded = 0;
+        const all = trials.flatMap(t => [t.prime, t.target]);
+        all.forEach(src => {
+          const img = new Image(); img.src = src;
+          img.onload = img.onerror = () => {
+            loaded++;
+            if (loaded === all.length) showTrial();
+          };
+        });
+      };
+    
+      function showTrial() {
+        container.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = trials[current].prime;
+        img.style.maxWidth = '250px';
+        container.appendChild(img);
+        setTimeout(() => {
+          container.innerHTML = '';
+          setTimeout(() => {
+            const target = document.createElement('img');
+            target.src = trials[current].target;
+            target.style.maxWidth = '120px';
+            container.appendChild(target);
+            setTimeout(() => {
+              container.innerHTML = '';
+              const mask = document.createElement('div');
+              mask.style.backgroundColor = '#000';
+              mask.style.width = '250px';
+              mask.style.height = '250px';
+              container.appendChild(mask);
+              setTimeout(() => { container.innerHTML = ''; showScale(); }, 200);
+            }, 500);
+          }, 200);
+        }, 300);
+      }
+    
+      function showScale() {
+        const q = document.createElement('p');
+        q.textContent = 'עד כמה האות הסינית נראתה לך חמה או קרה?';
+        q.style.textAlign = 'center';
+        q.style.marginBottom = '20px';
+        container.appendChild(q);
+        const box = document.createElement('div');
+        box.style.display = 'flex'; box.style.gap = '12px'; box.style.justifyContent = 'center';
+        container.appendChild(box);
+        const labels = ['קר מאוד', 'קר', 'חם', 'חם מאוד'];
+        const colors = ['#007bff','#5bc0de','#f0ad4e','#d9534f'];
+        for (let i = 1; i <= 4; i++) {
+          const b = document.createElement('div');
+          b.textContent = labels[i-1];
+          b.style.backgroundColor = colors[i-1];
+          b.style.color = 'white';
+          b.style.padding = '10px 16px';
+          b.style.fontSize = '15px';
+          b.style.border = 'none'; b.style.borderRadius = '6px';
+          b.onclick = () => record(i);
+          box.appendChild(b);
+        }
+      }
+    
+      function record(score) {
+        results.push({
+          prime: trials[current].prime,
+          target: trials[current].target,
+          response: score,
+          category: trials[current].category,
+          filename: trials[current].filename
+        });
+        current++;
+        if (current < trials.length) showTrial();
+        else save();
+      }
+    
+      function save() {
+        const joined = results.map(r => `${r.filename}:${r.response}[${r.category}]`).join('|');
+        // EmbeddedData removed('ampBlock2', joined);
+        const continueBtn = document.createElement('div');
+        continueBtn.textContent = 'המשך';
+        continueBtn.style.backgroundColor = '#007bff';
+        continueBtn.style.color = 'white';
+        continueBtn.style.padding = '12px 24px';
+        continueBtn.style.fontSize = '18px';
+        continueBtn.style.borderRadius = '8px';
+        continueBtn.style.cursor = 'pointer';
+        continueBtn.style.marginTop = '40px';
+        continueBtn.onclick = function() {
+          onFinish();
+        };
+        container.innerHTML = '';
+        container.appendChild(continueBtn);
+      }
+      preload();
+  }}
+  function block3(onFinish) {
+      const that = this;
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.inset = '0';
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+      container.style.backgroundColor = '#fff';
+      container.style.fontFamily = 'sans-serif';
+      container.style.zIndex = '9999';
+      document.body.appendChild(container);
+    
+      const primes = [
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/hessam-nabavi-ULU4auyoHkU-unsplash.jpg', category: 'ללא עריכה', filename: 'hessam-nabavi-ULU4auyoHkU-unsplash.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/pixabay.jpg', category: 'ללא עריכה', filename: 'pixabay.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.53.44.jpeg', category: 'ערוכות', filename: 'WhatsApp Image 2025-04-27 at 18.53.44.jpeg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/mountain-4810958_1280.jpg', category: 'ניטרליות', filename: 'mountain-4810958_1280.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-21%20at%2019.15.32%20%281%29.jpeg', category: 'ערוכות', filename: 'WhatsApp Image 2025-04-21 at 19.15.32 (1).jpeg'}
+      ];;
+      const targets = [
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg11.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg12.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg13.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg14.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg15.png'
+      ];;
+    
+      const results = [];
+      primes.sort(() => Math.random() - 0.5);
+      targets.sort(() => Math.random() - 0.5);
+      const trials = primes.map((p, i) => ({ prime: p.url, category: p.category, filename: p.filename, target: targets[i] }));
+      let current = 0;
+    
+      const preload = () => {
+        let loaded = 0;
+        const all = trials.flatMap(t => [t.prime, t.target]);
+        all.forEach(src => {
+          const img = new Image(); img.src = src;
+          img.onload = img.onerror = () => {
+            loaded++;
+            if (loaded === all.length) showTrial();
+          };
+        });
+      };
+    
+      function showTrial() {
+        container.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = trials[current].prime;
+        img.style.maxWidth = '250px';
+        container.appendChild(img);
+        setTimeout(() => {
+          container.innerHTML = '';
+          setTimeout(() => {
+            const target = document.createElement('img');
+            target.src = trials[current].target;
+            target.style.maxWidth = '120px';
+            container.appendChild(target);
+            setTimeout(() => {
+              container.innerHTML = '';
+              const mask = document.createElement('div');
+              mask.style.backgroundColor = '#000';
+              mask.style.width = '250px';
+              mask.style.height = '250px';
+              container.appendChild(mask);
+              setTimeout(() => { container.innerHTML = ''; showScale(); }, 200);
+            }, 500);
+          }, 200);
+        }, 300);
+      }
+    
+      function showScale() {
+        const q = document.createElement('p');
+        q.textContent = 'עד כמה האות הסינית נראתה לך חמה או קרה?';
+        q.style.textAlign = 'center';
+        q.style.marginBottom = '20px';
+        container.appendChild(q);
+        const box = document.createElement('div');
+        box.style.display = 'flex'; box.style.gap = '12px'; box.style.justifyContent = 'center';
+        container.appendChild(box);
+        const labels = ['קר מאוד', 'קר', 'חם', 'חם מאוד'];
+        const colors = ['#007bff','#5bc0de','#f0ad4e','#d9534f'];
+        for (let i = 1; i <= 4; i++) {
+          const b = document.createElement('div');
+          b.textContent = labels[i-1];
+          b.style.backgroundColor = colors[i-1];
+          b.style.color = 'white';
+          b.style.padding = '10px 16px';
+          b.style.fontSize = '15px';
+          b.style.border = 'none'; b.style.borderRadius = '6px';
+          b.onclick = () => record(i);
+          box.appendChild(b);
+        }
+      }
+    
+      function record(score) {
+        results.push({
+          prime: trials[current].prime,
+          target: trials[current].target,
+          response: score,
+          category: trials[current].category,
+          filename: trials[current].filename
+        });
+        current++;
+        if (current < trials.length) showTrial();
+        else save();
+      }
+    
+      function save() {
+        const joined = results.map(r => `${r.filename}:${r.response}[${r.category}]`).join('|');
+        // EmbeddedData removed('ampBlock3', joined);
+        const continueBtn = document.createElement('div');
+        continueBtn.textContent = 'המשך';
+        continueBtn.style.backgroundColor = '#007bff';
+        continueBtn.style.color = 'white';
+        continueBtn.style.padding = '12px 24px';
+        continueBtn.style.fontSize = '18px';
+        continueBtn.style.borderRadius = '8px';
+        continueBtn.style.cursor = 'pointer';
+        continueBtn.style.marginTop = '40px';
+        continueBtn.onclick = function() {
+          onFinish();
+        };
+        container.innerHTML = '';
+        container.appendChild(continueBtn);
+      }
+      preload();
+  }}
+  function block4(onFinish) {
+      const that = this;
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.inset = '0';
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+      container.style.backgroundColor = '#fff';
+      container.style.fontFamily = 'sans-serif';
+      container.style.zIndex = '9999';
+      document.body.appendChild(container);
+    
+      const primes = [
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-21%20at%2019.15.32%20%283%29.jpeg', category: 'ערוכות', filename: 'WhatsApp Image 2025-04-21 at 19.15.32 (3).jpeg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/forest-1835019_1280.jpg', category: 'ניטרליות', filename: 'forest-1835019_1280.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.53.45.jpeg', category: 'ערוכות', filename: 'WhatsApp Image 2025-04-27 at 18.53.45.jpeg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.53.45%20%282%29.jpeg', category: 'ערוכות', filename: 'WhatsApp Image 2025-04-27 at 18.53.45 (2).jpeg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/macbook-459196_1280.jpg', category: 'ניטרליות', filename: 'macbook-459196_1280.jpg'}
+      ];;
+      const targets = [
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg16.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg17.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg18.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg19.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg20.png'
+      ];;
+    
+      const results = [];
+      primes.sort(() => Math.random() - 0.5);
+      targets.sort(() => Math.random() - 0.5);
+      const trials = primes.map((p, i) => ({ prime: p.url, category: p.category, filename: p.filename, target: targets[i] }));
+      let current = 0;
+    
+      const preload = () => {
+        let loaded = 0;
+        const all = trials.flatMap(t => [t.prime, t.target]);
+        all.forEach(src => {
+          const img = new Image(); img.src = src;
+          img.onload = img.onerror = () => {
+            loaded++;
+            if (loaded === all.length) showTrial();
+          };
+        });
+      };
+    
+      function showTrial() {
+        container.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = trials[current].prime;
+        img.style.maxWidth = '250px';
+        container.appendChild(img);
+        setTimeout(() => {
+          container.innerHTML = '';
+          setTimeout(() => {
+            const target = document.createElement('img');
+            target.src = trials[current].target;
+            target.style.maxWidth = '120px';
+            container.appendChild(target);
+            setTimeout(() => {
+              container.innerHTML = '';
+              const mask = document.createElement('div');
+              mask.style.backgroundColor = '#000';
+              mask.style.width = '250px';
+              mask.style.height = '250px';
+              container.appendChild(mask);
+              setTimeout(() => { container.innerHTML = ''; showScale(); }, 200);
+            }, 500);
+          }, 200);
+        }, 300);
+      }
+    
+      function showScale() {
+        const q = document.createElement('p');
+        q.textContent = 'עד כמה האות הסינית נראתה לך חמה או קרה?';
+        q.style.textAlign = 'center';
+        q.style.marginBottom = '20px';
+        container.appendChild(q);
+        const box = document.createElement('div');
+        box.style.display = 'flex'; box.style.gap = '12px'; box.style.justifyContent = 'center';
+        container.appendChild(box);
+        const labels = ['קר מאוד', 'קר', 'חם', 'חם מאוד'];
+        const colors = ['#007bff','#5bc0de','#f0ad4e','#d9534f'];
+        for (let i = 1; i <= 4; i++) {
+          const b = document.createElement('div');
+          b.textContent = labels[i-1];
+          b.style.backgroundColor = colors[i-1];
+          b.style.color = 'white';
+          b.style.padding = '10px 16px';
+          b.style.fontSize = '15px';
+          b.style.border = 'none'; b.style.borderRadius = '6px';
+          b.onclick = () => record(i);
+          box.appendChild(b);
+        }
+      }
+    
+      function record(score) {
+        results.push({
+          prime: trials[current].prime,
+          target: trials[current].target,
+          response: score,
+          category: trials[current].category,
+          filename: trials[current].filename
+        });
+        current++;
+        if (current < trials.length) showTrial();
+        else save();
+      }
+    
+      function save() {
+        const joined = results.map(r => `${r.filename}:${r.response}[${r.category}]`).join('|');
+        // EmbeddedData removed('ampBlock4', joined);
+        const continueBtn = document.createElement('div');
+        continueBtn.textContent = 'המשך';
+        continueBtn.style.backgroundColor = '#007bff';
+        continueBtn.style.color = 'white';
+        continueBtn.style.padding = '12px 24px';
+        continueBtn.style.fontSize = '18px';
+        continueBtn.style.borderRadius = '8px';
+        continueBtn.style.cursor = 'pointer';
+        continueBtn.style.marginTop = '40px';
+        continueBtn.onclick = function() {
+          onFinish();
+        };
+        container.innerHTML = '';
+        container.appendChild(continueBtn);
+      }
+      preload();
+  }}
+  function block5(onFinish) {
+      const that = this;
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.inset = '0';
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+      container.style.backgroundColor = '#fff';
+      container.style.fontFamily = 'sans-serif';
+      container.style.zIndex = '9999';
+      document.body.appendChild(container);
+    
+      const primes = [
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/mountain-8110139_1920.jpg', category: 'ניטרליות', filename: 'mountain-8110139_1920.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.53.46.jpeg', category: 'ערוכות', filename: 'WhatsApp Image 2025-04-27 at 18.53.46.jpeg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-27%20at%2018.53.45%20%281%29.jpeg', category: 'ערוכות', filename: 'WhatsApp Image 2025-04-27 at 18.53.45 (1).jpeg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/chair-270980_1280.jpg', category: 'ניטרליות', filename: 'chair-270980_1280.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/WhatsApp%20Image%202025-04-20%20at%2010.26.11.jpeg', category: 'ללא עריכה', filename: 'WhatsApp Image 2025-04-20 at 10.26.11.jpeg'}
+      ];;
+      const targets = [
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg21.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg22.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg23.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg24.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg25.png'
+      ];;
+    
+      const results = [];
+      primes.sort(() => Math.random() - 0.5);
+      targets.sort(() => Math.random() - 0.5);
+      const trials = primes.map((p, i) => ({ prime: p.url, category: p.category, filename: p.filename, target: targets[i] }));
+      let current = 0;
+    
+      const preload = () => {
+        let loaded = 0;
+        const all = trials.flatMap(t => [t.prime, t.target]);
+        all.forEach(src => {
+          const img = new Image(); img.src = src;
+          img.onload = img.onerror = () => {
+            loaded++;
+            if (loaded === all.length) showTrial();
+          };
+        });
+      };
+    
+      function showTrial() {
+        container.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = trials[current].prime;
+        img.style.maxWidth = '250px';
+        container.appendChild(img);
+        setTimeout(() => {
+          container.innerHTML = '';
+          setTimeout(() => {
+            const target = document.createElement('img');
+            target.src = trials[current].target;
+            target.style.maxWidth = '120px';
+            container.appendChild(target);
+            setTimeout(() => {
+              container.innerHTML = '';
+              const mask = document.createElement('div');
+              mask.style.backgroundColor = '#000';
+              mask.style.width = '250px';
+              mask.style.height = '250px';
+              container.appendChild(mask);
+              setTimeout(() => { container.innerHTML = ''; showScale(); }, 200);
+            }, 500);
+          }, 200);
+        }, 300);
+      }
+    
+      function showScale() {
+        const q = document.createElement('p');
+        q.textContent = 'עד כמה האות הסינית נראתה לך חמה או קרה?';
+        q.style.textAlign = 'center';
+        q.style.marginBottom = '20px';
+        container.appendChild(q);
+        const box = document.createElement('div');
+        box.style.display = 'flex'; box.style.gap = '12px'; box.style.justifyContent = 'center';
+        container.appendChild(box);
+        const labels = ['קר מאוד', 'קר', 'חם', 'חם מאוד'];
+        const colors = ['#007bff','#5bc0de','#f0ad4e','#d9534f'];
+        for (let i = 1; i <= 4; i++) {
+          const b = document.createElement('div');
+          b.textContent = labels[i-1];
+          b.style.backgroundColor = colors[i-1];
+          b.style.color = 'white';
+          b.style.padding = '10px 16px';
+          b.style.fontSize = '15px';
+          b.style.border = 'none'; b.style.borderRadius = '6px';
+          b.onclick = () => record(i);
+          box.appendChild(b);
+        }
+      }
+    
+      function record(score) {
+        results.push({
+          prime: trials[current].prime,
+          target: trials[current].target,
+          response: score,
+          category: trials[current].category,
+          filename: trials[current].filename
+        });
+        current++;
+        if (current < trials.length) showTrial();
+        else save();
+      }
+    
+      function save() {
+        const joined = results.map(r => `${r.filename}:${r.response}[${r.category}]`).join('|');
+        // EmbeddedData removed('ampBlock5', joined);
+        const continueBtn = document.createElement('div');
+        continueBtn.textContent = 'המשך';
+        continueBtn.style.backgroundColor = '#007bff';
+        continueBtn.style.color = 'white';
+        continueBtn.style.padding = '12px 24px';
+        continueBtn.style.fontSize = '18px';
+        continueBtn.style.borderRadius = '8px';
+        continueBtn.style.cursor = 'pointer';
+        continueBtn.style.marginTop = '40px';
+        continueBtn.onclick = function() {
+          onFinish();
+        };
+        container.innerHTML = '';
+        container.appendChild(continueBtn);
+      }
+      preload();
+  }}
+  function block6(onFinish) {
+      const that = this;
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.inset = '0';
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.alignItems = 'center';
+      container.style.justifyContent = 'center';
+      container.style.backgroundColor = '#fff';
+      container.style.fontFamily = 'sans-serif';
+      container.style.zIndex = '9999';
+      document.body.appendChild(container);
+    
+      const primes = [
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/car-8607713_1280.jpg', category: 'ניטרליות', filename: 'car-8607713_1280.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A0%D7%99%D7%98%D7%A8%D7%9C%D7%99%D7%95%D7%AA/cucumbers-3809535_1280.jpg', category: 'ניטרליות', filename: 'cucumbers-3809535_1280.jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-21%20at%2019.15.32%20%282%29.jpeg', category: 'ערוכות', filename: 'WhatsApp Image 2025-04-21 at 19.15.32 (2).jpeg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%9C%D7%9C%D7%90%20%D7%A2%D7%A8%D7%99%D7%9B%D7%94/pixabay-topview%281%29.jpg', category: 'ללא עריכה', filename: 'pixabay-topview(1).jpg'},
+        {url: 'https://raw.githubusercontent.com/mayatzf/amp-task/main/%D7%A2%D7%A8%D7%95%D7%9B%D7%95%D7%AA/WhatsApp%20Image%202025-04-21%20at%2019.15.32.jpeg', category: 'ערוכות', filename: 'WhatsApp Image 2025-04-21 at 19.15.32.jpeg'}
+      ];;
+      const targets = [
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg26.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg27.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg28.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg29.png',
+        'https://raw.githubusercontent.com/mayatzf/amp-task/main/סימניות/t_neg30.png'
+      ];;
+    
+      const results = [];
+      primes.sort(() => Math.random() - 0.5);
+      targets.sort(() => Math.random() - 0.5);
+      const trials = primes.map((p, i) => ({ prime: p.url, category: p.category, filename: p.filename, target: targets[i] }));
+      let current = 0;
+    
+      const preload = () => {
+        let loaded = 0;
+        const all = trials.flatMap(t => [t.prime, t.target]);
+        all.forEach(src => {
+          const img = new Image(); img.src = src;
+          img.onload = img.onerror = () => {
+            loaded++;
+            if (loaded === all.length) showTrial();
+          };
+        });
+      };
+    
+      function showTrial() {
+        container.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = trials[current].prime;
+        img.style.maxWidth = '250px';
+        container.appendChild(img);
+        setTimeout(() => {
+          container.innerHTML = '';
+          setTimeout(() => {
+            const target = document.createElement('img');
+            target.src = trials[current].target;
+            target.style.maxWidth = '120px';
+            container.appendChild(target);
+            setTimeout(() => {
+              container.innerHTML = '';
+              const mask = document.createElement('div');
+              mask.style.backgroundColor = '#000';
+              mask.style.width = '250px';
+              mask.style.height = '250px';
+              container.appendChild(mask);
+              setTimeout(() => { container.innerHTML = ''; showScale(); }, 200);
+            }, 500);
+          }, 200);
+        }, 300);
+      }
+    
+      function showScale() {
+        const q = document.createElement('p');
+        q.textContent = 'עד כמה האות הסינית נראתה לך חמה או קרה?';
+        q.style.textAlign = 'center';
+        q.style.marginBottom = '20px';
+        container.appendChild(q);
+        const box = document.createElement('div');
+        box.style.display = 'flex'; box.style.gap = '12px'; box.style.justifyContent = 'center';
+        container.appendChild(box);
+        const labels = ['קר מאוד', 'קר', 'חם', 'חם מאוד'];
+        const colors = ['#007bff','#5bc0de','#f0ad4e','#d9534f'];
+        for (let i = 1; i <= 4; i++) {
+          const b = document.createElement('div');
+          b.textContent = labels[i-1];
+          b.style.backgroundColor = colors[i-1];
+          b.style.color = 'white';
+          b.style.padding = '10px 16px';
+          b.style.fontSize = '15px';
+          b.style.border = 'none'; b.style.borderRadius = '6px';
+          b.onclick = () => record(i);
+          box.appendChild(b);
+        }
+      }
+    
+      function record(score) {
+        results.push({
+          prime: trials[current].prime,
+          target: trials[current].target,
+          response: score,
+          category: trials[current].category,
+          filename: trials[current].filename
+        });
+        current++;
+        if (current < trials.length) showTrial();
+        else save();
+      }
+    
+      function save() {
+        const joined = results.map(r => `${r.filename}:${r.response}[${r.category}]`).join('|');
+        // EmbeddedData removed('ampBlock6', joined);
+        const continueBtn = document.createElement('div');
+        continueBtn.textContent = 'המשך';
+        continueBtn.style.backgroundColor = '#007bff';
+        continueBtn.style.color = 'white';
+        continueBtn.style.padding = '12px 24px';
+        continueBtn.style.fontSize = '18px';
+        continueBtn.style.borderRadius = '8px';
+        continueBtn.style.cursor = 'pointer';
+        continueBtn.style.marginTop = '40px';
+        continueBtn.onclick = function() {
+          onFinish();
+        };
+        container.innerHTML = '';
+        container.appendChild(continueBtn);
+      }
+      preload();
+  }}
+
+  const blocks = [block1, block2, block3, block4, block5, block6].sort(() => Math.random() - 0.5);
+  let current = 0;
+
+  function runNextBlock() {
+    if (current < blocks.length) {
+      blocks[current](() => {
+        current++;
+        runNextBlock();
+      });
+    } else {
+      const joined = allResults.map(r => `${r.filename}:${r.response}[${r.category}]`).join('|');
+      parent.postMessage({ ampResults: joined }, '*');
+
+      const done = document.createElement('div');
+      done.innerHTML = "<h2 style='text-align:center;margin-top:50px;'>תודה, החלק הסתיים.</h2>";
+      document.body.innerHTML = '';
+      document.body.appendChild(done);
+    }
+  }
+
+  runNextBlock();
+</script>
+</body>
+</html>
